@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>School Management System || Ganesh Daggavolu</title>
+  
+  <!-- CSS Dependencies (Bootstrap 4, FontAwesome, W3.CSS matching original project) -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="icon" href="images/admin.png" type="image/png">
+
+  <style>
+    /* Global & Typography */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Roboto", sans-serif;
+      background-color: #f7f9fa;
+      color: #333;
+    }
+    a:link { text-decoration: none; }
+
+    /* Home Navigation */
+    .bs-example { margin: 0; }
+    .navbar-brand { font-size: 20px; font-family: sans-serif; font-weight: bold; }
+    .nav-item.active { font-weight: bold; }
+
+    /* Home Welcome Jumbotron */
+    .jumbotron-welcome {
+      margin-top: 55px;
+      margin-bottom: 0px;
+      background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.65)), url('images/bg2.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: white;
+      text-align: center;
+      padding: 90px 20px;
+    }
+    .glow {
+      font-size: 65px;
+      font-weight: 800;
+      color: #ffffff;
+      text-align: center;
+      -webkit-animation: glow 1.5s ease-in-out infinite alternate;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+    @-webkit-keyframes glow {
+      from { text-shadow: 0 0 10px #eee, 0 0 20px #000, 0 0 40px #9554b3; }
+      to { text-shadow: 0 0 20px #eee, 0 0 30px #ff4da6, 0 0 60px #ff4da6; }
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #eee, 0 0 20px #000, 0 0 40px #9554b3; }
+      to { text-shadow: 0 0 20px #eee, 0 0 30px #ff4da6, 0 0 60px #ff4da6; }
+    }
+
+    /* 3-Cards Role Selection Grid */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1050px;
+      margin: 40px auto;
+      padding: 15px;
+    }
+    .role-card {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .role-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.18);
+    }
+    .role-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-bottom: 1px solid #eee;
+    }
+    .role-card .title {
+      color: #555;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 15px 0 10px;
+      letter-spacing: 1px;
+    }
+    .btn-view {
+      border: none;
+      outline: 0;
+      padding: 12px;
+      color: white;
+      background-color: #111;
+      text-align: center;
+      cursor: pointer;
+      width: 100%;
+      font-size: 17px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .btn-view:hover { background-color: #19B3D3; color: white; }
+
+    /* General Jumbotron for Click pages */
+    .jumbotron-click {
+      margin-top: 75px;
+      margin-bottom: 25px;
+      background-color: #e9ecef;
+      border-radius: 6px;
+      padding: 50px 30px;
+    }
+
+    /* Footer */
+    footer {
+      background: #111;
+      color: #aaa;
+      padding: 30px 15px;
+      text-align: center;
+      font-size: 15px;
+      margin-top: 50px;
+    }
+    footer a { color: #19B3D3; font-weight: bold; }
+    footer a:hover { color: #fff; text-decoration: underline; }
+
+    /* Dashboard Shell (Admin, Teacher, Student) */
+    .dashboard-header {
+      position: fixed;
+      background: #22242A;
+      padding: 18px 25px;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dashboard-header h3 {
+      color: #fff;
+      margin: 0;
+      text-transform: uppercase;
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dashboard-header span { color: #19B3D3; }
+    .logout-btn {
+      padding: 6px 16px;
+      background: #19B3D3;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff !important;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .logout-btn:hover { background: #0B87A6; }
+
+    .sidebar {
+      background: #2f323a;
+      top: 65px;
+      position: fixed;
+      left: 0;
+      width: 250px;
+      height: calc(100vh - 65px);
+      overflow-y: auto;
+      padding-top: 25px;
+      transition: 0.4s;
+      z-index: 999;
+    }
+    .sidebar .profile_image {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      border: 3px solid #19B3D3;
+      background: #fff;
+    }
+    .sidebar h4 { color: #ccc; margin-top: 0; margin-bottom: 20px; font-size: 18px; }
+    .sidebar a {
+      color: #fff;
+      display: block;
+      width: 100%;
+      line-height: 52px;
+      padding-left: 30px;
+      box-sizing: border-box;
+      transition: 0.3s;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .sidebar a:hover, .sidebar a.active {
+      background: #19B3D3;
+      color: white;
+    }
+    .sidebar i { padding-right: 12px; font-size: 16px; }
+
+    .content-area {
+      margin-left: 250px;
+      padding: 85px 25px 50px;
+      min-height: 100vh;
+      background: #f7f9fa;
+    }
+    @media (max-width: 768px) {
+      .sidebar { left: -250px; }
+      .sidebar.open { left: 0; }
+      .content-area { margin-left: 0; }
+    }
+
+    /* Order / Stats Cards */
+    .order-card { color: #fff; border-radius: 6px; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .order-card .card-block { padding: 22px; }
+    .order-card i { font-size: 26px; }
+    .f-left { float: left; }
+    .f-right { float: right; }
+    .bg-c-blue { background: linear-gradient(45deg, #4099ff, #73b4ff); }
+    .bg-c-green { background: linear-gradient(45deg, #2ed8b6, #59e0c5); }
+    .bg-c-yellow { background: linear-gradient(45deg, #FFB64D, #ffcb80); }
+    .bg-c-pink { background: linear-gradient(45deg, #FF5370, #ff869a); }
+
+    /* Notice Alerts */
+    .notice-item {
+      padding: 16px 20px;
+      background-color: #f44336;
+      color: white;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .notice-close {
+      position: absolute;
+      right: 15px;
+      top: 12px;
+      font-size: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Form Container */
+    .form-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 35px;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+
+    /* Custom Badges */
+    .badge-approved { background-color: #28a745; color: white; padding: 4px 8px; border-radius: 4px; }
+    .badge-pending { background-color: #ffc107; color: #212529; padding: 4px 8px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <!-- APP ROOT CONTAINER -->
+  <div id="app"></div>
+
+  <!-- JavaScript & Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script>
+    /**
+     * School Management System - Client Application
+     * Developed by Ganesh Daggavolu
+     */
+
+    // --- 1. LOCAL DATABASE & STATE MANAGEMENT ---
+    const DB_KEY = 'school_db_data_v1';
+    const AUTH_KEY = 'school_auth_user_v1';
+
+    function getInitialData() {
+      return {
+        teachers: [
+          { id: 1, first_name: 'Suresh', last_name: 'Reddy', username: 'suresh', salary: 45000, mobile: '9876543210', status: true },
+          { id: 2, first_name: 'Anjali', last_name: 'Sharma', username: 'anjali', salary: 42000, mobile: '9876543211', status: true },
+          { id: 3, first_name: 'Vikram', last_name: 'Rao', username: 'vikram', salary: 38000, mobile: '9876543212', status: false }
+        ],
+        students: [
+          { id: 1, roll: '101', first_name: 'Rahul', last_name: 'Kumar', username: 'rahul', cl: '10', mobile: '9123456780', fee: 12000, status: true },
+          { id: 2, roll: '102', first_name: 'Sneha', last_name: 'Patel', username: 'sneha', cl: '10', mobile: '9123456781', fee: 12000, status: true },
+          { id: 3, roll: '103', first_name: 'Amit', last_name: 'Verma', username: 'amit', cl: '9', mobile: '9123456782', fee: 10000, status: true },
+          { id: 4, roll: '104', first_name: 'Pooja', last_name: 'Reddy', username: 'pooja', cl: '9', mobile: '9123456783', fee: 10000, status: false }
+        ],
+        attendance: [
+          { roll: '101', cl: '10', date: '2026-10-10', present_status: 'Present' },
+          { roll: '102', cl: '10', date: '2026-10-10', present_status: 'Present' },
+          { roll: '101', cl: '10', date: '2026-10-11', present_status: 'Present' },
+          { roll: '102', cl: '10', date: '2026-10-11', present_status: 'Absent' },
+          { roll: '103', cl: '9', date: '2026-10-11', present_status: 'Present' }
+        ],
+        notices: [
+          { id: 1, date: '12-Oct-2026', by: 'Principal / Admin', message: 'Mid-term examinations will commence from next Monday. Timetables have been posted.' },
+          { id: 2, date: '10-Oct-2026', by: 'Management', message: 'Annual Sports Day celebrations will be held on 25th of this month.' },
+          { id: 3, date: '05-Oct-2026', by: 'Admin', message: 'Staff meeting scheduled for Friday 3:00 PM in Conference Hall.' }
+        ]
+      };
+    }
+
+    function loadDB() {
+      const data = localStorage.getItem(DB_KEY);
+      if (!data) {
+        const init = getInitialData();
+        saveDB(init);
+        return init;
+      }
+      return JSON.parse(data);
+    }
+
+    function saveDB(db) {
+      localStorage.setItem(DB_KEY, JSON.stringify(db));
+    }
+
+    function getAuth() {
+      const a = localStorage.getItem(AUTH_KEY);
+      return a ? JSON.parse(a) : null;
+    }
+
+    function setAuth(user) {
+      localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+    }
+
+    function clearAuth() {
+      localStorage.removeItem(AUTH_KEY);
+    }
+
+    // --- 2. ROUTER & NAVIGATION ---
+    function navigate(route) {
+      window.location.hash = route;
+    }
+
+    window.addEventListener('hashchange', render);
+    window.addEventListener('load', render);
+
+    function render() {
+      const hash = window.location.hash.replace('#', '') || '/';
+      const app = document.getElementById('app');
+      const auth = getAuth();
+
+      // Route Switcher
+      if (hash === '/') {
+        renderHome(app);
+      } else if (hash === '/adminclick') {
+        renderClick(app, 'admin');
+      } else if (hash === '/teacherclick') {
+        renderClick(app, 'teacher');
+      } else if (hash === '/studentclick') {
+        renderClick(app, 'student');
+      } else if (hash === '/aboutus') {
+        renderAboutUs(app);
+      } else if (hash === '/contactus') {
+        renderContactUs(app);
+      } else if (hash === '/adminlogin') {
+        renderLogin(app, 'admin');
+      } else if (hash === '/teacherlogin') {
+        renderLogin(app, 'teacher');
+      } else if (hash === '/studentlogin') {
+        renderLogin(app, 'student');
+      } else if (hash === '/adminsignup') {
+        renderSignup(app, 'admin');
+      } else if (hash === '/teachersignup') {
+        renderSignup(app, 'teacher');
+      } else if (hash === '/studentsignup') {
+        renderSignup(app, 'student');
+      } else if (hash.startsWith('/admin-')) {
+        if (!auth || auth.role !== 'admin') {
+          navigate('/adminlogin');
+          return;
+        }
+        renderAdminPortal(app, hash);
+      } else if (hash.startsWith('/teacher-')) {
+        if (!auth || auth.role !== 'teacher') {
+          navigate('/teacherlogin');
+          return;
+        }
+        renderTeacherPortal(app, hash);
+      } else if (hash.startsWith('/student-')) {
+        if (!auth || auth.role !== 'student') {
+          navigate('/studentlogin');
+          return;
+        }
+        renderStudentPortal(app, hash);
+      } else {
+        renderHome(app);
+      }
+      window.scrollTo(0, 0);
+    }
+
+    // --- 3. PUBLIC VIEWS ---
+    function getHomeNavbar(active = 'home') {
+      return `
+        <div class="bs-example">
+          <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+            <a href="#/" class="navbar-brand">School Management</a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+              <div class="navbar-nav">
+                <a href="#/" class="nav-item nav-link ${active === 'home' ? 'active' : ''}">Home</a>
+                <a href="#/adminclick" class="nav-item nav-link ${active === 'admin' ? 'active' : ''}">Admin</a>
+                <a href="#/teacherclick" class="nav-item nav-link ${active === 'teacher' ? 'active' : ''}">Teacher</a>
+                <a href="#/studentclick" class="nav-item nav-link ${active === 'student' ? 'active' : ''}">Student</a>
+              </div>
+              <div class="navbar-nav">
+                <a href="#/aboutus" class="nav-item nav-link ${active === 'about' ? 'active' : ''}">About Us</a>
+                <a href="#/contactus" class="nav-item nav-link ${active === 'contact' ? 'active' : ''}">Contact Us</a>
+              </div>
+            </div>
+          </nav>
+        </div>
+      `;
+    }
+
+    function getFooter() {
+      return `
+        <footer>
+          <div class="container">
+            <p class="mb-1">School Management System &bull; Developed By : <strong style="color:#19B3D3;">Ganesh Daggavolu</strong></p>
+            <small class="text-muted">&copy; 2026 Ganesh Daggavolu. All rights reserved.</small>
+          </div>
+        </footer>
+      `;
+    }
+
+    function renderHome(app) {
+      app.innerHTML = `
+        ${getHomeNavbar('home')}
+        <div class="jumbotron-welcome">
+          <br>
+          <h1 class="display-4 glow">Welcome</h1>
+          <br><br>
+          <p class="lead" style="font-size:22px; font-weight:500;">Knowledge is key to success.</p>
+          <br><br>
+          <p class="lead">
+            <a class="btn btn-primary btn-lg px-4" href="#/studentsignup" role="button">Take Admission</a>
+          </p>
+          <br>
+        </div>
+
+        <div class="grid-container">
+          <div class="grid-item">
+            <div class="role-card">
+              <img src="images/admin.png" alt="Admin">
+              <p class="title">ADMIN</p>
+              <button class="btn-view" onclick="navigate('/adminclick')">View</button>
+            </div>
+          </div>
+          <div class="grid-item">
+            <div class="role-card">
+              <img src="images/teacher.png" alt="Teacher">
+              <p class="title">TEACHER</p>
+              <button class="btn-view" onclick="navigate('/teacherclick')">View</button>
+            </div>
+          </div>
+          <div class="grid-item">
+            <div class="role-card">
+              <img src="images/student1.png" alt="Student">
+              <p class="title">STUDENT</p>
+              <button class="btn-view" onclick="navigate('/studentclick')">View</button>
+            </div>
+          </div>
+        </div>
+
+        ${getFooter()}
+      `;
+    }
+
+    function renderClick(app, role) {
+      const titles = { admin: 'Admin', teacher: 'Teacher', student: 'Student' };
+      const roleName = titles[role];
+      app.innerHTML = `
+        ${getHomeNavbar(role)}
+        <div class="container" style="min-height:75vh;">
+          <div class="jumbotron jumbotron-click">
+            <h1 class="display-4">Hello, ${roleName}</h1>
+            <p class="lead">Welcome to Online School Management System.</p>
+            <hr class="my-4">
+            <p>You can access various features after Login/SignUp.</p>
+            <p class="lead">
+              <a class="btn btn-primary btn-lg mr-2" href="#/${role}signup" role="button">SignUp</a>
+              <a class="btn btn-primary btn-lg" href="#/${role}login" role="button">Login</a>
+            </p>
+          </div>
+        </div>
+        ${getFooter()}
+      `;
+    }
+
+    function renderAboutUs(app) {
+      app.innerHTML = `
+        ${getHomeNavbar('about')}
+        <div class="container" style="min-height:75vh;">
+          <br><br><br>
+          <center>
+            <h3 class="alert alert-success" style="margin-bottom:0px; max-width:800px;">About Us !</h3>
+          </center>
+          <div class="jumbotron jumbotron-click" style="max-width:800px; margin:0 auto;">
+            <h1 class="display-4">Hello</h1>
+            <p class="lead">A service dedicated to Admin, Student and Teacher. We provide online resources, professional support and guidance to all our students, teacher whenever, and from wherever they have chosen to study.</p>
+            <hr class="my-4">
+            <p>Explore our Website.</p>
+            <p class="lead">
+              <a class="btn btn-primary btn-lg" href="#/" role="button">HOME</a>
+            </p>
+          </div>
+        </div>
+        ${getFooter()}
+      `;
+    }
+
+    function renderContactUs(app) {
+      app.innerHTML = `
+        ${getHomeNavbar('contact')}
+        <div class="container" style="min-height:75vh;">
+          <br><br><br>
+          <center>
+            <h3 class="alert alert-success" style="max-width:600px;">Send Us Your Valuable Feedback !</h3>
+            <div class="form-container" style="margin-top:20px; text-align:left;">
+              <form id="contactForm">
+                <div class="form-group">
+                  <label><strong>Name</strong></label>
+                  <input type="text" class="form-control" id="cName" required placeholder="Your Full Name">
+                </div>
+                <div class="form-group">
+                  <label><strong>Email Address</strong></label>
+                  <input type="email" class="form-control" id="cEmail" required placeholder="name@example.com">
+                </div>
+                <div class="form-group">
+                  <label><strong>Feedback / Message</strong></label>
+                  <textarea class="form-control" id="cMsg" rows="4" required placeholder="Enter message here..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg mt-3">Send Message</button>
+              </form>
+            </div>
+          </center>
+        </div>
+        ${getFooter()}
+      `;
+      document.getElementById('contactForm').onsubmit = (e) => {
+        e.preventDefault();
+        alert('Thank you for contacting us! Your message has been sent successfully.');
+        navigate('/');
+      };
+    }
+
+    // --- 4. AUTHENTICATION (LOGIN & SIGNUP) ---
+    function renderLogin(app, role) {
+      const titles = { admin: 'Admin', teacher: 'Teacher', student: 'Student' };
+      const roleName = titles[role];
+      app.innerHTML = `
+        ${getHomeNavbar(role)}
+        <div class="container" style="min-height:75vh; padding-top:40px;">
+          <div class="form-container">
+            <h3 class="text-center font-weight-bold mb-4">${roleName} Login</h3>
+            <form id="loginForm">
+              <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="lUser" class="form-control" required placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="lPass" class="form-control" required placeholder="Enter password">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block btn-lg mt-3">Login</button>
+            </form>
+            <hr>
+            <div class="text-center">
+              <button class="btn btn-outline-success btn-sm" id="btnQuickDemo">
+                <i class="fa fa-bolt mr-1"></i> Quick 1-Click Demo Login
+              </button>
+              <div class="mt-3">
+                <small>Don't have an account? <a href="#/${role}signup">SignUp here</a></small>
+              </div>
+            </div>
+          </div>
+        </div>
+        ${getFooter()}
+      `;
+
+      document.getElementById('btnQuickDemo').onclick = () => {
+        let userObj = { role: role, name: roleName };
+        if (role === 'admin') userObj.name = 'Ganesh Daggavolu (Admin)';
+        if (role === 'teacher') userObj.name = 'Suresh Reddy (Teacher)';
+        if (role === 'student') userObj = { role: 'student', roll: '101', name: 'Rahul Kumar' };
+        setAuth(userObj);
+        navigate(`/${role}-dashboard`);
+      };
+
+      document.getElementById('loginForm').onsubmit = (e) => {
+        e.preventDefault();
+        const u = document.getElementById('lUser').value.trim();
+        const p = document.getElementById('lPass').value.trim();
+        const db = loadDB();
+
+        if (role === 'admin') {
+          setAuth({ role: 'admin', name: u || 'Ganesh Daggavolu' });
+          navigate('/admin-dashboard');
+        } else if (role === 'teacher') {
+          const t = db.teachers.find(x => x.username.toLowerCase() === u.toLowerCase());
+          if (t && !t.status) {
+            alert('Your account is pending Admin approval. Please contact administration.');
+            return;
+          }
+          setAuth({ role: 'teacher', name: t ? `${t.first_name} ${t.last_name}` : u });
+          navigate('/teacher-dashboard');
+        } else if (role === 'student') {
+          const s = db.students.find(x => x.username.toLowerCase() === u.toLowerCase());
+          if (s && !s.status) {
+            alert('Your admission is pending approval.');
+            return;
+          }
+          setAuth({ role: 'student', roll: s ? s.roll : '101', name: s ? `${s.first_name} ${s.last_name}` : u });
+          navigate('/student-dashboard');
+        }
+      };
+    }
+
+    function renderSignup(app, role) {
+      const titles = { admin: 'Admin', teacher: 'Teacher', student: 'Student' };
+      const roleName = titles[role];
+      app.innerHTML = `
+        ${getHomeNavbar(role)}
+        <div class="container" style="min-height:75vh; padding-top:40px;">
+          <div class="form-container">
+            <h3 class="text-center font-weight-bold mb-4">${roleName} Registration</h3>
+            <form id="signupForm">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>First Name</label>
+                  <input type="text" id="sFname" class="form-control" required placeholder="First name">
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Last Name</label>
+                  <input type="text" id="sLname" class="form-control" required placeholder="Last name">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="sUser" class="form-control" required placeholder="Choose username">
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="sPass" class="form-control" required placeholder="Password">
+              </div>
+
+              ${role === 'teacher' ? `
+                <div class="form-group">
+                  <label>Salary (Expected)</label>
+                  <input type="number" id="sSalary" class="form-control" required placeholder="40000">
+                </div>
+                <div class="form-group">
+                  <label>Mobile Number</label>
+                  <input type="text" id="sMobile" class="form-control" required placeholder="10-digit mobile">
+                </div>
+              ` : ''}
+
+              ${role === 'student' ? `
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <label>Roll Number</label>
+                    <input type="text" id="sRoll" class="form-control" required placeholder="e.g. 105">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label>Class</label>
+                    <input type="text" id="sClass" class="form-control" required placeholder="e.g. 10">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Fee (Annual)</label>
+                  <input type="number" id="sFee" class="form-control" required placeholder="12000">
+                </div>
+                <div class="form-group">
+                  <label>Contact Number</label>
+                  <input type="text" id="sMobile" class="form-control" required placeholder="Contact">
+                </div>
+              ` : ''}
+
+              <button type="submit" class="btn btn-primary btn-block btn-lg mt-3">Register</button>
+              <div class="text-center mt-3">
+                <small>Already registered? <a href="#/${role}login">Login here</a></small>
+              </div>
+            </form>
+          </div>
+        </div>
+        ${getFooter()}
+      `;
+
+      document.getElementById('signupForm').onsubmit = (e) => {
+        e.preventDefault();
+        const db = loadDB();
+        const fname = document.getElementById('sFname').value.trim();
+        const lname = document.getElementById('sLname').value.trim();
+        const user = document.getElementById('sUser').value.trim();
+
+        if (role === 'teacher') {
+          const salary = parseFloat(document.getElementById('sSalary').value) || 30000;
+          const mobile = document.getElementById('sMobile').value.trim();
+          db.teachers.push({
+            id: Date.now(),
+            first_name: fname,
+            last_name: lname,
+            username: user,
+            salary: salary,
+            mobile: mobile,
+            status: false // Pending approval
+          });
+          saveDB(db);
+          alert('Registration successful! Please wait for Admin approval before logging in.');
+          navigate('/teacherlogin');
+        } else if (role === 'student') {
+          const roll = document.getElementById('sRoll').value.trim();
+          const cl = document.getElementById('sClass').value.trim();
+          const fee = parseFloat(document.getElementById('sFee').value) || 10000;
+          const mobile = document.getElementById('sMobile').value.trim();
+          db.students.push({
+            id: Date.now(),
+            roll: roll,
+            first_name: fname,
+            last_name: lname,
+            username: user,
+            cl: cl,
+            mobile: mobile,
+            fee: fee,
+            status: false // Pending approval
+          });
+          saveDB(db);
+          alert('Admission request submitted! Please wait for Admin approval.');
+          navigate('/studentlogin');
+        } else {
+          alert('Admin registration successful!');
+          navigate('/adminlogin');
+        }
+      };
+    }
+
+    // --- 5. ADMIN PORTAL ---
+    function renderAdminPortal(app, route) {
+      const db = loadDB();
+      const auth = getAuth();
+      const adminName = auth ? auth.name : 'Ganesh Daggavolu';
+
+      const approvedTeachers = db.teachers.filter(t => t.status);
+      const pendingTeachers = db.teachers.filter(t => !t.status);
+      const approvedStudents = db.students.filter(s => s.status);
+      const pendingStudents = db.students.filter(s => !s.status);
+
+      const totalTeacherSalary = approvedTeachers.reduce((acc, t) => acc + (t.salary || 0), 0);
+      const pendingSalary = pendingTeachers.reduce((acc, t) => acc + (t.salary || 0), 0);
+      const totalStudentFee = approvedStudents.reduce((acc, s) => acc + (s.fee || 0), 0);
+
+      let contentHtml = '';
+
+      if (route === '/admin-dashboard') {
+        contentHtml = `
+          <div class="row">
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-blue order-card">
+                <div class="card-block">
+                  <h6 class="m-b-20">Total Teacher</h6>
+                  <h2 class="text-right"><i class="fas fa-chalkboard-teacher f-left"></i><span>${approvedTeachers.length}</span></h2>
+                  <p class="m-b-0">Pending Teacher<span class="f-right">${pendingTeachers.length}</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-green order-card">
+                <div class="card-block">
+                  <h6 class="m-b-20">Total Student</h6>
+                  <h2 class="text-right"><i class="fas fa-user-graduate f-left"></i><span>${approvedStudents.length}</span></h2>
+                  <p class="m-b-0">Pending Students<span class="f-right">${pendingStudents.length}</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-yellow order-card">
+                <div class="card-block">
+                  <h6 class="m-b-20">Teachers Salary</h6>
+                  <h2 class="text-right"><i class="fas fa-search-dollar f-left"></i><span>₹${totalTeacherSalary}</span></h2>
+                  <p class="m-b-0">Pending Salary<span class="f-right">₹${pendingSalary}</span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-pink order-card">
+                <div class="card-block">
+                  <h6 class="m-b-20">Student Fee</h6>
+                  <h2 class="text-right"><i class="fas fa-search-dollar f-left"></i><span>₹${totalStudentFee}</span></h2>
+                  <p class="m-b-0">Total Enrolled<span class="f-right">${db.students.length}</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-panel w3-blue py-2 mt-4 rounded">
+            <h5 class="m-0 font-weight-bold">Notice Board</h5>
+          </div>
+
+          ${db.notices.map((n, idx) => `
+            <div class="notice-item" id="notice-${idx}">
+              <span class="notice-close" onclick="document.getElementById('notice-${idx}').remove()">&times;</span>
+              <strong>${n.date} || By : ${n.by}</strong><br>
+              ${n.message}
+            </div>
+          `).join('')}
+        `;
+      } else if (route === '/admin-teacher') {
+        contentHtml = `
+          <div class="row">
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-blue order-card" style="cursor:pointer;" onclick="navigate('/admin-view-teacher')">
+                <div class="card-block">
+                  <h6 class="m-b-20">View All Teacher</h6>
+                  <h2 class="text-right"><i class="fas fa-eye f-left"></i><span>${db.teachers.length}</span></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-green order-card" style="cursor:pointer;" onclick="navigate('/admin-add-teacher')">
+                <div class="card-block">
+                  <h6 class="m-b-20">Add Teacher</h6>
+                  <h2 class="text-right"><i class="fas fa-plus-circle f-left"></i></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-yellow order-card" style="cursor:pointer;" onclick="navigate('/admin-approve-teacher')">
+                <div class="card-block">
+                  <h6 class="m-b-20">Approve Teacher</h6>
+                  <h2 class="text-right"><i class="fas fa-check-circle f-left"></i><span>${pendingTeachers.length}</span></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-pink order-card" style="cursor:pointer;" onclick="navigate('/admin-view-teacher-salary')">
+                <div class="card-block">
+                  <h6 class="m-b-20">View Salary</h6>
+                  <h2 class="text-right"><i class="fas fa-rupee-sign f-left"></i></h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (route === '/admin-view-teacher') {
+        contentHtml = `
+          <h4 class="font-weight-bold mb-3">All Registered Teachers</h4>
+          <div class="table-responsive bg-white p-3 shadow-sm rounded">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr><th>#</th><th>Name</th><th>Mobile</th><th>Salary</th><th>Status</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                ${db.teachers.map((t, idx) => `
+                  <tr>
+                    <td>${idx + 1}</td>
+                    <td>${t.first_name} ${t.last_name}</td>
+                    <td>${t.mobile}</td>
+                    <td>₹${t.salary}</td>
+                    <td>${t.status ? '<span class="badge badge-success">Approved</span>' : '<span class="badge badge-warning">Pending</span>'}</td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" onclick="deleteTeacher(${t.id})"><i class="fa fa-trash"></i> Delete</button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (route === '/admin-add-teacher') {
+        contentHtml = `
+          <div class="form-container" style="max-width:550px;">
+            <h4 class="font-weight-bold mb-3">Add New Teacher</h4>
+            <form id="addTeacherForm">
+              <div class="form-row">
+                <div class="form-group col-md-6"><label>First Name</label><input type="text" id="atFname" class="form-control" required></div>
+                <div class="form-group col-md-6"><label>Last Name</label><input type="text" id="atLname" class="form-control" required></div>
+              </div>
+              <div class="form-group"><label>Username</label><input type="text" id="atUser" class="form-control" required></div>
+              <div class="form-group"><label>Salary</label><input type="number" id="atSalary" class="form-control" required></div>
+              <div class="form-group"><label>Mobile</label><input type="text" id="atMobile" class="form-control" required></div>
+              <button type="submit" class="btn btn-primary btn-block">Add & Approve Teacher</button>
+            </form>
+          </div>
+        `;
+        setTimeout(() => {
+          document.getElementById('addTeacherForm').onsubmit = (e) => {
+            e.preventDefault();
+            db.teachers.push({
+              id: Date.now(),
+              first_name: document.getElementById('atFname').value,
+              last_name: document.getElementById('atLname').value,
+              username: document.getElementById('atUser').value,
+              salary: parseFloat(document.getElementById('atSalary').value),
+              mobile: document.getElementById('atMobile').value,
+              status: true
+            });
+            saveDB(db);
+            alert('Teacher added successfully!');
+            navigate('/admin-view-teacher');
+          };
+        }, 50);
+      } else if (route === '/admin-approve-teacher') {
+        contentHtml = `
+          <h4 class="font-weight-bold mb-3">Approve Pending Teachers</h4>
+          <div class="table-responsive bg-white p-3 shadow-sm rounded">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr><th>Name</th><th>Username</th><th>Salary</th><th>Mobile</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                ${pendingTeachers.length === 0 ? '<tr><td colspan="5" class="text-center text-muted">No pending teacher approvals!</td></tr>' : ''}
+                ${pendingTeachers.map(t => `
+                  <tr>
+                    <td>${t.first_name} ${t.last_name}</td>
+                    <td>${t.username}</td>
+                    <td>₹${t.salary}</td>
+                    <td>${t.mobile}</td>
+                    <td><button class="btn btn-success btn-sm" onclick="approveTeacher(${t.id})"><i class="fa fa-check"></i> Approve</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (route === '/admin-student') {
+        contentHtml = `
+          <div class="row">
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-blue order-card" style="cursor:pointer;" onclick="navigate('/admin-view-student')">
+                <div class="card-block">
+                  <h6 class="m-b-20">View All Student</h6>
+                  <h2 class="text-right"><i class="fas fa-eye f-left"></i><span>${db.students.length}</span></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-green order-card" style="cursor:pointer;" onclick="navigate('/admin-add-student')">
+                <div class="card-block">
+                  <h6 class="m-b-20">Add Student</h6>
+                  <h2 class="text-right"><i class="fas fa-plus-circle f-left"></i></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-yellow order-card" style="cursor:pointer;" onclick="navigate('/admin-approve-student')">
+                <div class="card-block">
+                  <h6 class="m-b-20">Approve Admission</h6>
+                  <h2 class="text-right"><i class="fas fa-check-circle f-left"></i><span>${pendingStudents.length}</span></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-c-pink order-card" style="cursor:pointer;" onclick="navigate('/admin-fee')">
+                <div class="card-block">
+                  <h6 class="m-b-20">View Fees</h6>
+                  <h2 class="text-right"><i class="fas fa-rupee-sign f-left"></i></h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (route === '/admin-view-student') {
+        contentHtml = `
+          <h4 class="font-weight-bold mb-3">Enrolled Students</h4>
+          <div class="table-responsive bg-white p-3 shadow-sm rounded">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr><th>Roll</th><th>Name</th><th>Class</th><th>Contact</th><th>Fee</th><th>Status</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                ${db.students.map(s => `
+                  <tr>
+                    <td><strong>${s.roll}</strong></td>
+                    <td>${s.first_name} ${s.last_name}</td>
+                    <td>Class ${s.cl}</td>
+                    <td>${s.mobile}</td>
+                    <td>₹${s.fee}</td>
+                    <td>${s.status ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-warning">Pending</span>'}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteStudent(${s.id})"><i class="fa fa-trash"></i> Delete</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (route === '/admin-add-student') {
+        contentHtml = `
+          <div class="form-container" style="max-width:550px;">
+            <h4 class="font-weight-bold mb-3">Add New Student</h4>
+            <form id="addStudentForm">
+              <div class="form-row">
+                <div class="form-group col-md-6"><label>First Name</label><input type="text" id="asFname" class="form-control" required></div>
+                <div class="form-group col-md-6"><label>Last Name</label><input type="text" id="asLname" class="form-control" required></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6"><label>Roll Number</label><input type="text" id="asRoll" class="form-control" required></div>
+                <div class="form-group col-md-6"><label>Class</label><input type="text" id="asClass" class="form-control" required></div>
+              </div>
+              <div class="form-group"><label>Fee (₹)</label><input type="number" id="asFee" class="form-control" required></div>
+              <div class="form-group"><label>Mobile</label><input type="text" id="asMobile" class="form-control" required></div>
+              <button type="submit" class="btn btn-primary btn-block">Add & Enroll Student</button>
+            </form>
+          </div>
+        `;
+        setTimeout(() => {
+          document.getElementById('addStudentForm').onsubmit = (e) => {
+            e.preventDefault();
+            db.students.push({
+              id: Date.now(),
+              roll: document.getElementById('asRoll').value,
+              first_name: document.getElementById('asFname').value,
+              last_name: document.getElementById('asLname').value,
+              cl: document.getElementById('asClass').value,
+              fee: parseFloat(document.getElementById('asFee').value),
+              mobile: document.getElementById('asMobile').value,
+              status: true
+            });
+            saveDB(db);
+            alert('Student added and enrolled!');
+            navigate('/admin-view-student');
+          };
+        }, 50);
+      } else if (route === '/admin-approve-student') {
+        contentHtml = `
+          <h4 class="font-weight-bold mb-3">Approve Pending Student Admissions</h4>
+          <div class="table-responsive bg-white p-3 shadow-sm rounded">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr><th>Roll</th><th>Name</th><th>Class</th><th>Fee</th><th>Mobile</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                ${pendingStudents.length === 0 ? '<tr><td colspan="6" class="text-center text-muted">No pending student admissions!</td></tr>' : ''}
+                ${pendingStudents.map(s => `
+                  <tr>
+                    <td>${s.roll}</td>
+                    <td>${s.first_name} ${s.last_name}</td>
+                    <td>Class ${s.cl}</td>
+                    <td>₹${s.fee}</td>
+                    <td>${s.mobile}</td>
+                    <td><button class="btn btn-success btn-sm" onclick="approveStudent(${s.id})"><i class="fa fa-check"></i> Approve</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (route === '/admin-attendance') {
+        contentHtml = `
+          <h4 class="font-weight-bold mb-3">Attendance Management</h4>
+          <div class="card p-4 shadow-sm bg-white mb-4">
+            <h5>Take Attendance (Class 10)</h5>
+            <div class="form-group">
+              <label>Select Date:</label>
+              <input type="date" id="attDate" class="form-control" style="max-width:250px;" value="2026-10-12">
+            </div>
+            <table class="table table-bordered">
+              <thead class="thead-light"><tr><th>Roll</th><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr></thead>
+              <tbody>
+                ${approvedStudents.map(s => `
+                  <tr>
+                    <td>${s.roll}</td>
+                    <td>${s.first_name} ${s.last_name}</td>
+                    <td>Class ${s.cl}</td>
+                    <td>
+                      <label class="mr-3"><input type="radio" name="att_${s.roll}" value="Present" checked> Present</label>
+                      <label><input type="radio" name="att_${s.roll}" value="Absent"> Absent</label>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+            <button class="btn btn-primary" onclick="submitAttendance()">Save Attendance</button>
+          </div>
+
+          <h5 class="font-weight-bold mt-4">Attendance Log</h5>
+          <div class="table-responsive bg-white p-3 shadow-sm rounded">
+            <table class="table table-bordered">
+              <thead><tr><th>Date</th><th>Roll</th><th>Status</th></tr></thead>
+              <tbody>
+                ${db.attendance.slice(-10).reverse().map(a => `
+                  <tr>
+                    <td>${a.date}</td>
+                    <td>${a.roll}</td>
+                    <td><span class="badge ${a.present_status === 'Present' ? 'badge-success' : 'badge-danger'}">${a.present_status}</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (route === '/admin-fee') {
+        contentHtml = `
+          <h4 class="font-weight-bold mb-3">Student Fee Management</h4>
+          <div class="table-responsive bg-white p-3 shadow-sm rounded">
+            <table class="table table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr><th>Roll</th><th>Student Name</th><th>Class</th><th>Annual Fee</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                ${approvedStudents.map(s => `
+                  <tr>
+                    <td>${s.roll}</td>
+                    <td>${s.first_name} ${s.last_name}</td>
+                    <td>Class ${s.cl}</td>
+                    <td>₹${s.fee}</td>
+                    <td><span class="badge badge-success">Paid / Updated</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (route === '/admin-notice') {
+        contentHtml = `
+          <div class="form-container" style="max-width:600px; margin-top:0;">
+            <h4 class="font-weight-bold mb-3">Post a New Announcement</h4>
+            <form id="postNoticeForm">
+              <div class="form-group">
+                <label>Posted By</label>
+                <input type="text" id="nBy" class="form-control" value="Admin / Management" required>
+              </div>
+              <div class="form-group">
+                <label>Notice Content</label>
+                <textarea id="nMsg" class="form-control" rows="4" required placeholder="Type institutional announcement..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Broadcast Notice</button>
+            </form>
+          </div>
+        `;
+        setTimeout(() => {
+          document.getElementById('postNoticeForm').onsubmit = (e) => {
+            e.preventDefault();
+            db.notices.unshift({
+              id: Date.now(),
+              date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+              by: document.getElementById('nBy').value,
+              message: document.getElementById('nMsg').value
+            });
+            saveDB(db);
+            alert('Notice broadcasted to all dashboards!');
+            navigate('/admin-dashboard');
+          };
+        }, 50);
+      } else {
+        contentHtml = `<p>Section loaded.</p>`;
+      }
+
+      app.innerHTML = `
+        <div class="dashboard-header">
+          <h3><i class="fas fa-graduation-cap"></i> School Management</h3>
+          <span class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</span>
+        </div>
+
+        <div class="sidebar">
+          <center>
+            <img src="images/admin.png" class="profile_image" alt="Admin">
+            <h4>${adminName}</h4>
+          </center>
+          <a class="${route === '/admin-dashboard' ? 'active' : ''}" onclick="navigate('/admin-dashboard')"><i class="fas fa-desktop"></i>Dashboard</a>
+          <a class="${route.startsWith('/admin-teacher') || route.startsWith('/admin-view-teacher') ? 'active' : ''}" onclick="navigate('/admin-teacher')"><i class="fas fa-chalkboard-teacher"></i>Teacher</a>
+          <a class="${route.startsWith('/admin-student') || route.startsWith('/admin-view-student') ? 'active' : ''}" onclick="navigate('/admin-student')"><i class="fas fa-user-graduate"></i>Student</a>
+          <a class="${route === '/admin-attendance' ? 'active' : ''}" onclick="navigate('/admin-attendance')"><i class="fas fa-address-card"></i>Attendance</a>
+          <a class="${route === '/admin-fee' ? 'active' : ''}" onclick="navigate('/admin-fee')"><i class="fas fa-search-dollar"></i>Fee</a>
+          <a class="${route === '/admin-notice' ? 'active' : ''}" onclick="navigate('/admin-notice')"><i class="fas fa-bullhorn"></i>Notice</a>
+        </div>
+
+        <div class="content-area">
+          ${contentHtml}
+        </div>
+      `;
+    }
+
+    // --- 6. TEACHER PORTAL ---
+    function renderTeacherPortal(app, route) {
+      const db = loadDB();
+      const auth = getAuth();
+      const teacherName = auth ? auth.name : 'Teacher';
+      const approvedStudents = db.students.filter(s => s.status);
+
+      app.innerHTML = `
+        <div class="dashboard-header">
+          <h3><i class="fas fa-graduation-cap"></i> School Management</h3>
+          <span class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</span>
+        </div>
+
+        <div class="sidebar">
+          <center>
+            <img src="images/teacher.png" class="profile_image" alt="Teacher">
+            <h4>${teacherName}</h4>
+          </center>
+          <a class="${route === '/teacher-dashboard' ? 'active' : ''}" onclick="navigate('/teacher-dashboard')"><i class="fas fa-desktop"></i>Dashboard</a>
+          <a class="${route === '/teacher-attendance' ? 'active' : ''}" onclick="navigate('/teacher-attendance')"><i class="fas fa-address-card"></i>Attendance</a>
+          <a class="${route === '/teacher-notice' ? 'active' : ''}" onclick="navigate('/teacher-notice')"><i class="fas fa-bullhorn"></i>Notice Board</a>
+        </div>
+
+        <div class="content-area">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card bg-c-blue order-card">
+                <div class="card-block">
+                  <h6>My Total Students</h6>
+                  <h2 class="text-right"><i class="fas fa-user-graduate f-left"></i><span>${approvedStudents.length}</span></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-c-green order-card">
+                <div class="card-block">
+                  <h6>Attendance Records</h6>
+                  <h2 class="text-right"><i class="fas fa-check-circle f-left"></i><span>${db.attendance.length}</span></h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-c-yellow order-card">
+                <div class="card-block">
+                  <h6>Salary Status</h6>
+                  <h2 class="text-right"><i class="fas fa-rupee-sign f-left"></i><span>Credited</span></h2>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-panel w3-blue py-2 mt-4 rounded">
+            <h5 class="m-0 font-weight-bold">Staff Notice Board</h5>
+          </div>
+
+          ${db.notices.map((n, idx) => `
+            <div class="notice-item" id="t-notice-${idx}">
+              <span class="notice-close" onclick="document.getElementById('t-notice-${idx}').remove()">&times;</span>
+              <strong>${n.date} || By : ${n.by}</strong><br>
+              ${n.message}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // --- 7. STUDENT PORTAL ---
+    function renderStudentPortal(app, route) {
+      const db = loadDB();
+      const auth = getAuth();
+      const studentName = auth ? auth.name : 'Student';
+      const myRoll = auth && auth.roll ? auth.roll : '101';
+
+      const myAttendance = db.attendance.filter(a => a.roll === myRoll);
+      const presentCount = myAttendance.filter(a => a.present_status === 'Present').length;
+      const attPercent = myAttendance.length > 0 ? Math.round((presentCount / myAttendance.length) * 100) : 100;
+
+      app.innerHTML = `
+        <div class="dashboard-header">
+          <h3><i class="fas fa-graduation-cap"></i> School Management</h3>
+          <span class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</span>
+        </div>
+
+        <div class="sidebar">
+          <center>
+            <img src="images/student1.png" class="profile_image" alt="Student">
+            <h4>${studentName}</h4>
+            <small class="text-light">Roll No: ${myRoll}</small>
+          </center>
+          <a class="${route === '/student-dashboard' ? 'active' : ''}" onclick="navigate('/student-dashboard')"><i class="fas fa-desktop"></i>Dashboard</a>
+          <a class="${route === '/student-attendance' ? 'active' : ''}" onclick="navigate('/student-attendance')"><i class="fas fa-address-card"></i>Attendance (${attPercent}%)</a>
+          <a class="${route === '/student-notice' ? 'active' : ''}" onclick="navigate('/student-notice')"><i class="fas fa-bullhorn"></i>Notice Board</a>
+        </div>
+
+        <div class="content-area">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card bg-c-blue order-card">
+                <div class="card-block">
+                  <h6>Attendance Percentage</h6>
+                  <h2 class="text-right"><i class="fas fa-user-check f-left"></i><span>${attPercent}%</span></h2>
+                  <p class="m-b-0">Present: ${presentCount} / Total: ${myAttendance.length}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-c-green order-card">
+                <div class="card-block">
+                  <h6>Fee Status</h6>
+                  <h2 class="text-right"><i class="fas fa-receipt f-left"></i><span>Paid</span></h2>
+                  <p class="m-b-0">Current Dues: ₹0</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card bg-c-yellow order-card">
+                <div class="card-block">
+                  <h6>Active Notices</h6>
+                  <h2 class="text-right"><i class="fas fa-bullhorn f-left"></i><span>${db.notices.length}</span></h2>
+                  <p class="m-b-0">Updated today</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-panel w3-blue py-2 mt-4 rounded">
+            <h5 class="m-0 font-weight-bold">School Announcements</h5>
+          </div>
+
+          ${db.notices.map((n, idx) => `
+            <div class="notice-item" id="s-notice-${idx}">
+              <span class="notice-close" onclick="document.getElementById('s-notice-${idx}').remove()">&times;</span>
+              <strong>${n.date} || By : ${n.by}</strong><br>
+              ${n.message}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // --- 8. ACTION HANDLERS ---
+    window.logout = function() {
+      clearAuth();
+      navigate('/');
+    };
+
+    window.approveTeacher = function(id) {
+      const db = loadDB();
+      const t = db.teachers.find(x => x.id === id);
+      if (t) {
+        t.status = true;
+        saveDB(db);
+        alert(`${t.first_name} has been approved!`);
+        render();
+      }
+    };
+
+    window.deleteTeacher = function(id) {
+      if (confirm('Are you sure you want to delete this teacher?')) {
+        const db = loadDB();
+        db.teachers = db.teachers.filter(x => x.id !== id);
+        saveDB(db);
+        render();
+      }
+    };
+
+    window.approveStudent = function(id) {
+      const db = loadDB();
+      const s = db.students.find(x => x.id === id);
+      if (s) {
+        s.status = true;
+        saveDB(db);
+        alert(`Admission for ${s.first_name} approved!`);
+        render();
+      }
+    };
+
+    window.deleteStudent = function(id) {
+      if (confirm('Are you sure you want to delete this student?')) {
+        const db = loadDB();
+        db.students = db.students.filter(x => x.id !== id);
+        saveDB(db);
+        render();
+      }
+    };
+
+    window.submitAttendance = function() {
+      const db = loadDB();
+      const date = document.getElementById('attDate').value;
+      const approved = db.students.filter(s => s.status);
+
+      approved.forEach(s => {
+        const rad = document.querySelector(`input[name="att_${s.roll}"]:checked`);
+        const status = rad ? rad.value : 'Present';
+        const existing = db.attendance.find(a => a.roll === s.roll && a.date === date);
+        if (existing) {
+          existing.present_status = status;
+        } else {
+          db.attendance.push({ roll: s.roll, cl: s.cl, date: date, present_status: status });
+        }
+      });
+
+      saveDB(db);
+      alert('Attendance saved successfully!');
+      render();
+    };
+  </script>
+</body>
+</html>
