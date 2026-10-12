@@ -1,5 +1,9 @@
-# Schoolmanagement
-![developer](https://img.shields.io/badge/Developed%20By%20%3A-Ganesh%20Daggavolu-blue)
+# School Management System
+[![Live Demo](https://img.shields.io/badge/Live%20Website-GitHub%20Pages-brightgreen?style=for-the-badge&logo=github)](https://daggavoluganesh.github.io/school-management-system/)
+[![Developer](https://img.shields.io/badge/Developed%20By%20%3A-Ganesh%20Daggavolu-blue?style=for-the-badge)](https://github.com/daggavoluganesh)
+
+> 🌐 **Live Interactive Website:** **[https://daggavoluganesh.github.io/school-management-system/](https://daggavoluganesh.github.io/school-management-system/)**
+
 ---
 ### Homepage
 ![homepage snap](static/screenshots/homepage.png)
