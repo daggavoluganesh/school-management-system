@@ -1,0 +1,94 @@
+from django import forms
+from django.contrib.auth.models import User
+from . import models
+
+# for admin
+class AdminSigupForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'password']
+        widgets = {
+            'password': forms.PasswordInput()
+        }
+
+# Alias with correct spelling
+AdminSignupForm = AdminSigupForm
+
+
+# for student related forms
+class StudentUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'password']
+        widgets = {
+            'password': forms.PasswordInput()
+        }
+
+class StudentUserUpdateForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(), required=False)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'password']
+
+class StudentExtraForm(forms.ModelForm):
+    class Meta:
+        model = models.StudentExtra
+        fields = ['roll', 'cl', 'mobile', 'fee', 'status']
+
+
+
+# for teacher related forms
+class TeacherUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'password']
+        widgets = {
+            'password': forms.PasswordInput()
+        }
+
+class TeacherUserUpdateForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(), required=False)
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'password']
+
+class TeacherExtraForm(forms.ModelForm):
+    class Meta:
+        model = models.TeacherExtra
+        fields = ['salary', 'mobile', 'status']
+
+
+
+
+# for Attendance related forms
+presence_choices = (('Present', 'Present'), ('Absent', 'Absent'))
+
+class AttendanceForm(forms.Form):
+    present_status = forms.ChoiceField(choices=presence_choices, required=False)
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+class AskDateForm(forms.Form):
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+
+
+
+# for notice related form
+class NoticeForm(forms.ModelForm):
+    by = forms.CharField(required=False)
+
+    class Meta:
+        model = models.Notice
+        fields = ['message', 'by']
+
+
+
+
+# for contact us page
+class ContactusForm(forms.Form):
+    Name = forms.CharField(max_length=30)
+    Email = forms.EmailField()
+    Message = forms.CharField(max_length=500, widget=forms.Textarea(attrs={'rows': 3, 'cols': 30}))
+
