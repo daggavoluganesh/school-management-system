@@ -1,7 +1,6 @@
 # Schoolmanagement
 ![developer](https://img.shields.io/badge/Developed%20By%20%3A-Ganesh%20Daggavolu-blue)
 ---
-## screenshots
 ### Homepage
 ![homepage snap](static/screenshots/homepage.png)
 ### Admin Dashboard
